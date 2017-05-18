@@ -1,81 +1,59 @@
+---
 #
-#             ____                ________             __
-#            / __/__  ___ ___ ___/ /_  __/______ _____/ /_____ ____
-#           _\ \/ _ \/ -_) -_) _  / / / / __/ _ `/ __/  '_/ -_) __/
-#           ___/ .__/\__/\__/\_,_/ /_/ /_/  \_,_/\__/_/\_\\__/_/
-#             /_/
-#                          https://speedtracker.org
+# The human-friendly name of the profile. Whenever you're asked for the profile
+# ID, it refers to the name of the profile file — in this case, "default".
 #
+name: "PromoPlanner Production"
 
+#
+# The default profile will be the one shown when accessing the root URL of your
+# SpeedTracker site.
+#
+default: true
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                                                                             #
-#                            (!)  PLEASE NOTE:                                #
-#                                                                             #
-#  This config file will be visible to the public eye, unless you're running  #
-#  a private repository. For this reason, we need to obfuscate any sensitive  #
-#  information.                                                               #
-#                                                                             #
-#  Think of a key/password to encrypt your data. You'll need to supply this   #
-#  key with every request you make to SpeedTracker.                           #
-#                                                                             #
-#  The encrypt tool (https://speedtracker.org/encrypt) allows you to encrypt  #
-#  any given text with a key of your choice. Read on.                         #
-#                                                                             #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# If you want tests to be repeated automatically, you can an interval (in hours)
+# with a minimum value of 12, as only two scheduled tests per day are allowed.
+# To disabled repeated tests, simply remove this property from the profile.
+#
+interval: 12
 
+#
+# WebPageTest test parameters.
+# For a list of supported params, check:
+#
+# https://www.npmjs.com/package/webpagetest
+#
+parameters:
+  connectivity: "Cable"
+  location: "Frankfurt:Chrome"
+  runs: 1
+  url: "https://promoplanner.o2business.de/#"
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                                                                             #
-#  > encryptionKey                                            (!) Encrypted   #
-#                                                                             #
-#  Open the encrypt tool (https://speedtracker.org/encrypt) and insert your   #
-#  key on the first input field. Leave the "What do you want to encrypt?"     #
-#  field blank and use the result on the encryptionKey field.                 #
-#                                                                             #
-#  e.g. The key "foobar123" will generate "0a5f0c0670219dc049"                #
-#                                                                             #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# The URL of the WebPageTest instance to be used with this profile. Please note that
+# if you decide to encrypt this URL, the filmstrip section will not be displayed.
+#
+# If you leave this field out, the public instance of WebPageTest will be used.
+#
+#wptUrl: https://www.webpagetest.org
 
-encryptionKey: "62f92b61b04289fb064306e5cde1013c"
-
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                                                                             #
-#  > wptKey                                                   (!) Encrypted   #
-#                                                                             #
-#  Open the encrypt tool (https://speedtracker.org/encrypt), insert your key  #
-#  on the first input field (e.g. foobar123) and your WebPageTest API key as  #
-#  the text to encrypt. Use the result on the wptKey field.                   #
-#                                                                             #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-wptKey: "18fc3a2fde41d49162414cb4daf964419997ff3b07c75afac22dffeda502f63bb411"
-
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                                                                             #
-#  > alerts                                                                   #
-#                                                                             #
-#  You can define alerts to be triggered when certain events occur (like a    #
-#  metric going over its specified budget). An alert is defined by an id      #
-#  (e.g. emailAlert) and depending on the type (email or slack) it accepts    #
-#  different parameters.                                                      #
-#                                                                             #
-#  Check https://speedtracker.org/docs#alerts for more information.           #
-#                                                                             #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-alerts:
- emailAlert:
-   type: "email"
-   recipients: ["3dbd67238110d98b201e1ee189b913179bc7f2681e9c01"]
-#  otherEmailAlert:
-#    type: "email"
-#    recipients: ["ENCRYPTED_EMAIL_ADDRESS2", "ENCRYPTED_EMAIL_ADDRESS3"]
-#  slackAlert:
-#    type: "slack"
-#    hookUrl: "ENCRYPTED_SLACK_HOOK_URL"
-#    channel: "#speedtracker"
-#    username: "SpeedTracker"
-#    iconEmoji: ":grimacing:"
+#
+# Performance budgets are defined with a metric id, a max/min allowed value
+# (in milliseconds), and one or multiple alerts — referenced by the ids defined
+# in the main config — to be triggered when a budget is overrun.
+#
+# For a list of metrics, check:
+#
+# https://github.com/speedtracker/speedtracker-api/blob/master/lib/SpeedTracker.js#L18-L37
+#
+budgets:
+  -
+    metric: TTFB
+    max: 500
+    alerts: ["emailAlert"]
+#  -
+#    metric: firstPaint
+#    max: 2000
+#    alerts: ["slackAlert"]
+---
